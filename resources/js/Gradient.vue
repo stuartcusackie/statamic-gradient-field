@@ -84,6 +84,8 @@
                 </template>
             </popover>
         </div>
+
+        <button v-if="value" class="btn-close rtl:mr-1 ltr:ml-1" :aria-label="__('Reset')" @click="resetGradient">&times;</button>
     </div>
 </template>
 
@@ -219,6 +221,10 @@ export default {
         onCopy: function (e) {
             this.copied = true;
             setTimeout(() => this.copied = false, 2000)
+        },
+
+        resetGradient() {
+            this.update(null);
         },
     },
 };
