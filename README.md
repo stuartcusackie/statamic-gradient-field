@@ -25,5 +25,5 @@ composer require stuartcusackie/statamic-gradient-field
 4. Use the generated CSS in your templates. Example below.
 
 ```
-<div class="w-8 h-8" style="background: {{ gradientField }}"></div>
+<div class="w-8 h-8" style="background: {{ gradientField }};"></div>
 ```
