@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center">
         <div class="input-group w-auto">
-            <popover name="gradients" class="gradient-field" placement="bottom-start">
+            <popover name="gradients" class="gradient-field" placement="bottom-start" @opened="handlePopoverOpen">
                 <template #trigger>
                     <div
                         class="input-group-prepend px-px"
@@ -27,7 +27,7 @@
                 <template #default="{ close: closePopover }">
                     <div class="gradient-field-popover">
                         <div class="p-2" v-if="config.allow_any_gradient">
-                            <vue-gpickr v-model="gradient" @input="gradientSelected" />
+                            <vue-gpickr v-if="gradient" v-model="gradient" @input="gradientSelected" />
                         </div>
 
                         <div class="px-4 pb-4" :class="{ 'pt-4': !config.allow_any_gradient }">
@@ -100,13 +100,7 @@ let globalOpacity = 100;
 
 let copied = false
 
-let gradient = new LinearGradient({
-    angle: 0,
-    stops: [
-        ['#00ff00', 0],
-        ['#ff0000', 1]
-    ]
-});
+let gradient = null;
 
 export default {
 
@@ -130,9 +124,6 @@ export default {
 
             if(this.isValidLinearGradient(defaultGradient)) {
                 this.setGradient(defaultGradient)
-            }
-            else {
-                this.setGradient('linear-gradient(90deg, #00ff00 0%, #ff0000 100%)')
             }
         }
     },
@@ -160,6 +151,12 @@ export default {
     
 
     methods: {
+        handlePopoverOpen () {
+            if(!this.gradient) {
+                this.setGradient('linear-gradient(90deg, #00ff00 0%, #ff0000 100%)')
+            }
+        },
+
         isValidLinearGradient(str) {
             const gradientRegex = /^linear-gradient\(\s*(?:-?\d+deg\s*,\s*)?(?:#[0-9a-fA-F]{3,8}\s+\d+%)(?:,\s*#[0-9a-fA-F]{3,8}\s+\d+%)*\s*\)$/;
             return gradientRegex.test(str);
@@ -224,6 +221,7 @@ export default {
         },
 
         resetGradient() {
+            this.gradient = null;
             this.update(null);
         },
     },
